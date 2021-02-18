@@ -13,11 +13,12 @@ jobs:
           - name: macOS
             runs-on: macos-10.15
           - name: Windows
-            runs-on: windows-latest
+            runs-on: windows-2019
 
     env:
       SRC_PATH: ${{ github.workspace }}/src
       BUILD_PATH: ${{ github.workspace }}/builddir
+      QT_VERSION: '5.15.2'
     steps:
       - uses: actions/checkout@v2
       - name: install dependencies for Linux
@@ -36,9 +37,21 @@ jobs:
           brew link qt5 --force
       - name: install dependencies for Windows
         if: runner.os == 'Windows'
-        uses: jurplel/install-qt-action@v2
         run: |
           choco install jack
+      - name: Cache Qt
+        id: cache-qt
+        if: runner.os == 'Windows'
+        uses: actions/cache@v1
+        with:
+          path: ../Qt
+          key: ${{ runner.os }}-QtCache-${{ env.QT_VERSION }}
+      - name: Install Qt
+        uses: jurplel/install-qt-action@v2
+        if: runner.os == 'Windows'
+        with:
+          version: ${{ env.QT_VERSION }}
+          cached: ${{ steps.cache-qt.outputs.cache-hit }}
       - name: build
         env:
           DEVELOPER_DIR: '/Applications/Xcode_11.7.app/Contents/Developer' # specify XCode version on macOS
