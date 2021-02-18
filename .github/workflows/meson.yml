@@ -1,0 +1,40 @@
+name: meson-build
+on: [workflow_dispatch, pull_request]
+jobs:
+  linux:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v2
+    - uses: actions/setup-python@v1
+    - name: install dependencies
+      run: |
+        sudo apt-get update
+        sudo apt-get install --yes libasound2-dev libjack-dev libpulse-dev qt5-default qt5-qmake qttools5-dev
+    - uses: BSFishy/meson-build@v1.0.2
+      with:
+        action: build
+        meson-version: 0.56.2
+  windows:
+    runs-on: windows-latest
+    steps:
+    - uses: actions/checkout@v2
+    - uses: actions/setup-python@v1
+    - name: Cache Qt
+      id: cache-qt
+      uses: actions/cache@v1
+      with:
+        path: ../Qt
+        key: ${{ runner.os }}-QtCache
+    - name: Install Qt
+      uses: jurplel/install-qt-action@v2
+      with:
+        version: '5.15.2'
+        host: 'windows'
+        target: 'desktop'
+        arch: 'win64_mingw81'
+        cached: ${{ steps.cache-qt.outputs.cache-hit }}
+        modules: 'qtcore'
+    - uses: BSFishy/meson-build@v1.0.2
+      with:
+        action: build
+        meson-version: 0.57
