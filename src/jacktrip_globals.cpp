@@ -49,6 +49,10 @@
 #include <mach/thread_policy.h>
 #endif  //__MAC_OSX__
 
+#if defined(__WIN32__)
+#include <Windows.h>
+#include <Processthreadsapi.h>
+#endif
 #include "jacktrip_globals.h"
 
 #if defined(__MAC_OSX__)
