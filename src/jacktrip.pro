@@ -98,8 +98,11 @@ win32 {
 #cc  CONFIG += x86 console
   CONFIG += c++11 console
   INCLUDEPATH += "C:\Program Files (x86)\Jack\includes"
+  INCLUDEPATH += "C:\Program Files\JACK2\includes" # for Jack 1.9.17 and later
   LIBS += "C:\Program Files (x86)\Jack\lib\libjack64.lib"
   LIBS += "C:\Program Files (x86)\Jack\lib\libjackserver64.lib"
+  LIBS += "C:\Program Files\JACK2\lib\libjack64.lib" # for Jack 1.9.17 and later
+  LIBS += "C:\Program Files\JACK2\lib\libjackserver64.lib" # for Jack 1.9.17 and later
 #cc  QMAKE_CXXFLAGS += -D__WINDOWS_ASIO__ #-D__UNIX_JACK__ #RtAudio Flags
   #QMAKE_LFLAGS += -static -static-libgcc -static-libstdc++ -lpthread
   LIBS += -lWs2_32 #cc -lOle32 #needed by rtaudio/asio
