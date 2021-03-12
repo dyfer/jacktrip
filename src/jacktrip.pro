@@ -20,7 +20,7 @@ QT += network
 DEFINES += WAIRTOHUB
 
 # http://wiki.qtcentre.org/index.php?title=Undocumented_qmake#Custom_tools
-#cc DEFINES += __RT_AUDIO__
+DEFINES += __RT_AUDIO__
 # Configuration without Jack
 nojack {
   DEFINES += __NO_JACK__
@@ -51,6 +51,8 @@ macx {
   # can change between 32bits (x86) or 64bits(x86_64) Change this to go back to 32 bits (x86)
   LIBS += -framework CoreAudio -framework CoreFoundation
   DEFINES += __MAC_OSX__
+  CONFIG += link_pkgconfig
+  PKGCONFIG += rtaudio
   }
 
 linux-g++ | linux-g++-64 {
@@ -157,6 +159,11 @@ HEADERS += DataProtocol.h \
 !nojack {
 HEADERS += JackAudioInterface.h
 }
+
+contains(DEFINES, __RT_AUDIO__) {
+    HEADERS += RtAudioInterface.h
+}
+
 SOURCES += DataProtocol.cpp \
            JMess.cpp \
            JackTrip.cpp \
@@ -181,6 +188,10 @@ SOURCES += DataProtocol.cpp \
 
 !nojack {
 SOURCES += JackAudioInterface.cpp
+}
+
+contains(DEFINES, __RT_AUDIO__) {
+    SOURCES += RtAudioInterface.cpp
 }
 
 # RtAudio Input
